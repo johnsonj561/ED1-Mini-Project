@@ -7,7 +7,7 @@
 #include "BeltMotorDriver.h"
 
 /**
-* Constructor
+* Constructor attaches motor to arduino pins and sets motor to OFF state
 * @param enablePin pin to enable h-bridge channel
 * @param pwmForwardPin pin to control forward motion
 * @param pwnReversePin pin to control reverse motion
@@ -19,45 +19,44 @@ BeltMotorDriver::BeltMotorDriver(int enablePin, int pwmForwardPin, int pwmRevers
   pinMode(_enablePin, OUTPUT);
   pinMode(_pwmForwardPin, OUTPUT);
   pinMode(_pwmReversePin, OUTPUT);
-  //initialize motor OFF
   disableMotor();
   digitalWrite(_pwmForwardPin, LOW);
   digitalWrite(_pwmReversePin, LOW);
 }
 
 /**
-* Turn motor on
+* Turn motor on by setting _enablePin HIGH
 */
 void BeltMotorDriver::enableMotor(){
-    digitalWrite(_enablePin, HIGH);
+  if(!digitalRead(_enablePin)){
+    digitalWrite(_enablePin, HIGH); 
+  }
 }
 
 /**
-* Turn motor off
+* Turn motor off by setting _enablePin LOW
 */
 void BeltMotorDriver::disableMotor(){
+  if(digitalRead(_enablePin)){
     digitalWrite(_enablePin, LOW);
+  }
 }
 
 /**
-* Drive motor in forward direction
+* Drive motor in forward direction. Will enable motor if not already enabled.
 */
 void BeltMotorDriver::driveForward(){
-  if(!digitalRead(_enablePin)){
-    enableMotor();
-  } 
+  enableMotor();
   digitalWrite(_pwmReversePin, LOW); 
   digitalWrite(_pwmForwardPin, HIGH);
 }
 
 /**
-* Drive motor in forward direction
+* Drive motor in forward direction. Will enable motor if not already enabled.
 * @param pwm controls motor speed (0 <= pwm <= 255, default = 255)
 */
 void BeltMotorDriver::driveForward(int pwm){
-  if(!digitalRead(_enablePin)){
-    enableMotor();
-  } 
+  enableMotor();
   digitalWrite(_pwmReversePin, LOW); 
   if(0 <= pwm && pwm <= 255){
       digitalWrite(_pwmForwardPin, pwm);
@@ -68,24 +67,20 @@ void BeltMotorDriver::driveForward(int pwm){
 }
 
 /**
-* Drive motor in reverse direction
+* Drive motor in reverse direction. Will enable motor if not already enabled.
 */
 void BeltMotorDriver::driveReverse(){
-  if(!digitalRead(_enablePin)){
-    enableMotor();
-  } 
+  enableMotor();
   digitalWrite(_pwmForwardPin, LOW); 
   digitalWrite(_pwmReversePin, HIGH);
 }
 
 /**
-* Drive motor in reverse direction
+* Drive motor in reverse direction. Will enable motor if not already enabled.
 * @param pwm controls motor speed (0 <= pwm <= 255, default = 255)
 */
 void BeltMotorDriver::driveReverse(int pwm){
-  if(!digitalRead(_enablePin)){
-    enableMotor();
-  } 
+  enableMotor();
   digitalWrite(_pwmForwardPin, LOW); 
   if(0 <= pwm && pwm <= 255){
       digitalWrite(_pwmReversePin, pwm);
