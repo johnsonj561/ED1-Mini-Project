@@ -9,13 +9,13 @@
 
 /**
 *Constructor assigns arduino pin to LED and initializes LED to OFF state
-*@param ledPin arduino pin that will signal LED
+*@param ledPin arduino output pin that will signal LED
 */
 LED::LED(int ledPin){
   _ledPin = ledPin;
   pinMode(_ledPin, OUTPUT);
   digitalWrite(_ledPin, LOW);
-  _state = false;
+  _state = 0;
 }
 
 /**
@@ -24,7 +24,7 @@ LED::LED(int ledPin){
 void LED::turnOnLED(){
   if(!_state){
     digitalWrite(_ledPin, HIGH);
-    _state = true;
+    _state = 1;
   }
 }
 
@@ -34,7 +34,7 @@ void LED::turnOnLED(){
 void LED::turnOffLED(){
   if(_state){
     digitalWrite(_ledPin, LOW);
-    _state = false;
+    _state = 0;
   }
 }
 
