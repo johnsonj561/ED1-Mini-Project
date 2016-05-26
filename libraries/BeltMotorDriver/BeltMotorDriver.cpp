@@ -59,7 +59,7 @@ void BeltMotorDriver::driveForward(int pwm){
   enableMotor();
   digitalWrite(_pwmReversePin, LOW); 
   if(0 <= pwm && pwm <= 255){
-      digitalWrite(_pwmForwardPin, pwm);
+      analogWrite(_pwmForwardPin, pwm);
   }
   else{
     digitalWrite(_pwmForwardPin, HIGH);
