@@ -53,8 +53,8 @@ int LED::toggleLED(){
 }
 
 /**
-*@return True if LED is on and _state = True
-*@return False if LED is off and _state = False
+*@return True if LED is on and _state = 1
+*@return False if LED is off and _state = 0
 */
 bool LED::isOn(){
   if(_state){
