@@ -22,6 +22,7 @@ class BeltMotorDriver
     int _enablePin;
     int _pwmForwardPin;
     int _pwmReversePin;
+    int _state;
 };
 
 #endif

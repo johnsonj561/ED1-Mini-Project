@@ -22,14 +22,16 @@ BeltMotorDriver::BeltMotorDriver(int enablePin, int pwmForwardPin, int pwmRevers
   disableMotor();
   digitalWrite(_pwmForwardPin, LOW);
   digitalWrite(_pwmReversePin, LOW);
+  _state = 0;
 }
 
 /**
 * Turn motor on by setting _enablePin HIGH
 */
 void BeltMotorDriver::enableMotor(){
-  if(!digitalRead(_enablePin)){
+  if(!_state){
     digitalWrite(_enablePin, HIGH); 
+    _state = 1;
   }
 }
 
@@ -37,8 +39,9 @@ void BeltMotorDriver::enableMotor(){
 * Turn motor off by setting _enablePin LOW
 */
 void BeltMotorDriver::disableMotor(){
-  if(digitalRead(_enablePin)){
+  if(_state){
     digitalWrite(_enablePin, LOW);
+    _state = 0;
   }
 }
 
@@ -59,7 +62,8 @@ void BeltMotorDriver::driveForward(int pwm){
   enableMotor();
   digitalWrite(_pwmReversePin, LOW); 
   if(0 <= pwm && pwm <= 255){
-      analogWrite(_pwmForwardPin, pwm);
+    Serial.println(pwm);
+    analogWrite(_pwmForwardPin, pwm);
   }
   else{
     digitalWrite(_pwmForwardPin, HIGH);
@@ -81,11 +85,20 @@ void BeltMotorDriver::driveReverse(){
 */
 void BeltMotorDriver::driveReverse(int pwm){
   enableMotor();
-  digitalWrite(_pwmForwardPin, LOW); 
+  digitalWrite(_pwmForwardPin, 0); 
   if(0 <= pwm && pwm <= 255){
-      digitalWrite(_pwmReversePin, pwm);
+    Serial.println(pwm);
+    analogWrite(_pwmReversePin, pwm);
   }
   else{
     digitalWrite(_pwmReversePin, HIGH);
   }
+}
+
+/**
+*Checks if motor is on and return true of on
+*@return _state
+*/
+int BeltMotorDriver::getState(){
+  return _state;
 }
