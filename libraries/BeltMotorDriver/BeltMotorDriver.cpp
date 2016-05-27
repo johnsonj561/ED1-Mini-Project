@@ -22,7 +22,6 @@ BeltMotorDriver::BeltMotorDriver(int enablePin, int pwmForwardPin, int pwmRevers
   disableMotor();
   digitalWrite(_pwmForwardPin, LOW);
   digitalWrite(_pwmReversePin, LOW);
-  _state = 0;
 }
 
 /**
