@@ -18,6 +18,7 @@ class BeltMotorDriver
     void driveForward(int pwm);
     void driveReverse();
     void driveReverse(int pwm);
+    int getState();
   private:
     int _enablePin;
     int _pwmForwardPin;
