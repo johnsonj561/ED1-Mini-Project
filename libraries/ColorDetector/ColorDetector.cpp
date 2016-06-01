@@ -46,7 +46,7 @@ int ColorDetector::detectColor(){
     Serial.println(blue);
     largest = blue;
     colorMatch = BLUE_MATCH;
-  }
+  }/*
   int yellow = detectYellow();
   if(yellow > largest){
     Serial.println("yellow > largest");
@@ -81,7 +81,8 @@ int ColorDetector::detectColor(){
     Serial.println(white);
     largest = white;
     colorMatch = WHITE_MATCH;
-  }
+  }    */
+  _RGBLED.turnOffLED();
   return colorMatch;
 }
 
@@ -195,4 +196,18 @@ int ColorDetector::detectWhite(){
   }
   white = white/10;
   return white;
+}
+
+/**
+*Detects an object placed in front of ColorDetector LED/Photocell
+*@return true if object is present
+*/
+bool ColorDetector::detectObject(){
+  _RGBLED.turnOnLED();
+  delay(200);
+  int photoCellVoltage = analogRead(_photoresistorPin);
+  if(photoCellVoltage > OBJECT_THRESHOLD){
+    return true;
+  }
+  return false;
 }

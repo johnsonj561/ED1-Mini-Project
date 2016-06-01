@@ -12,6 +12,7 @@
 class ColorDetector{
   public:
   ColorDetector(int redLEDPin, int greenLEDPin, int blueLEDPin, int photoresistorPin);
+  bool detectObject();
   int detectColor();
   int detectRed();
   int detectGreen();
@@ -30,7 +31,7 @@ class ColorDetector{
   static const int AQUA_MATCH = 6;
   static const int PINK_MATCH = 7;
   static const int WHITE_MATCH= 8;
-  private:
+  static const int OBJECT_THRESHOLD = 500;
   int _photoresistorPin;
   int _redLEDPin;
   int _greenLEDPin;
@@ -40,3 +41,4 @@ class ColorDetector{
 
 
 #endif
+
