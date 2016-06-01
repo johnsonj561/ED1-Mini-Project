@@ -20,7 +20,7 @@ ColorDetector::ColorDetector(int redLEDPin, int greenLEDPin, int blueLEDPin, int
 
 /**
 *Flashes RGB LED various colors and returns the detected color as integer value corresponding to color
-*Colors Tested Include: Red, Green, Blue, Yellow, Orange, Pink, Aqua, and White
+*Colors Tested Include: Red, Green, Blue, Yellow, Orange, magenta, cyan, and White
 *@return value corresponding to color that was detected by photoresister
 */
 int ColorDetector::detectColor(){
@@ -46,42 +46,8 @@ int ColorDetector::detectColor(){
     Serial.println(blue);
     largest = blue;
     colorMatch = BLUE_MATCH;
-  }/*
-  int yellow = detectYellow();
-  if(yellow > largest){
-    Serial.println("yellow > largest");
-    Serial.println(yellow);
-    largest = yellow;
-    colorMatch = YELLOW_MATCH;
   }
-  int orange = detectOrange();
-  if(orange > largest){
-    Serial.println("orange > largest");
-    Serial.println(orange);
-    largest = orange;
-    colorMatch = ORANGE_MATCH;
-  }
-  int pink = detectPink();
-  if(pink > largest){
-    Serial.println("pink > largest");
-    Serial.println(pink);
-    largest = pink;
-    colorMatch = PINK_MATCH;
-  }
-  int aqua = detectAqua();
-  if(aqua > largest){
-    Serial.println("aqua > largest");
-    Serial.println(aqua);
-    largest = aqua;
-    colorMatch = AQUA_MATCH;
-  }
-  int white = detectWhite();
-  if(white > largest){
-    Serial.println("white > largest");
-    Serial.println(white);
-    largest = white;
-    colorMatch = WHITE_MATCH;
-  }    */
+  
   _RGBLED.turnOffLED();
   return colorMatch;
 }
@@ -143,17 +109,17 @@ int ColorDetector::detectYellow(){
 }
 
 /**
-*Detects strength of pink in object and returns voltage read on photoresistor
+*Detects strength of magenta in object and returns voltage read on photoresistor
 */
-int ColorDetector::detectPink(){
-  int pink = 0;
-  _RGBLED.turnOnPinkLED();
+int ColorDetector::detectMagenta(){
+  int magenta = 0;
+  _RGBLED.turnOnMagentaLED();
   delay(200);
   for(int i = 0; i < 10; ++i){
-    pink += analogRead(_photoresistorPin);
+    magenta += analogRead(_photoresistorPin);
   }
-  pink = pink/10;
-  return pink;
+  magenta = magenta/10;
+  return magenta;
 }
 
 /**
@@ -171,17 +137,17 @@ int ColorDetector::detectOrange(){
 }
 
 /**
-*Detects strength of aqua in object and returns voltage read on photoresistor
+*Detects strength of cyan in object and returns voltage read on photoresistor
 */
-int ColorDetector::detectAqua(){
-  int aqua = 0;
-  _RGBLED.turnOnAquaLED();
+int ColorDetector::detectCyan(){
+  int cyan = 0;
+  _RGBLED.turnOnCyanLED();
   delay(200);
   for(int i = 0; i < 10; ++i){
-    aqua += analogRead(_photoresistorPin);
+    cyan += analogRead(_photoresistorPin);
   }
-  aqua = aqua/10;
-  return aqua;
+  cyan = cyan/10;
+  return cyan;
 }
 
 /**
