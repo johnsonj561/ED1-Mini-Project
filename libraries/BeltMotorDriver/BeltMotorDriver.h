@@ -8,21 +8,15 @@
 
 #include "Arduino.h"
 
-class BeltMotorDriver
-{
+class BeltMotorDriver{
   public:
-    BeltMotorDriver(int enablePin, int pwmForwardPin, int pwmReversePin);
-    void enableMotor();
-    void disableMotor();
+    BeltMotorDriver(int pwmForwardPin);
     void driveForward();
     void driveForward(int pwm);
-    void driveReverse();
-    void driveReverse(int pwm);
+    void stopMotor();
     int getState();
   private:
-    int _enablePin;
     int _pwmForwardPin;
-    int _pwmReversePin;
     int _state;
 };
 
