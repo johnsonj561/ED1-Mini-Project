@@ -12,101 +12,63 @@
 *@param redLedPin signals red pin of RGB
 *@param greenLedPin signals green pin of RGB
 *@param blueLedPin signals blue pin of RGB
+*@param pwmOn enables use of pulse width modulation using analogWrite(pwm) if set true
 */
-RGBLED::RGBLED(int redLedPin, int greenLedPin, int blueLedPin){
+RGBLED::RGBLED(int redLEDPin, int greenLEDPin, int blueLEDPin, bool pwmOn){
   //assign pins
-  _redLEDPin = redLedPin;
-  _greenLEDPin = greenLedPin;
-  _blueLEDPin = blueLedPin;
+  _redLEDPin = redLEDPin;
+  _greenLEDPin = greenLEDPin;
+  _blueLEDPin = blueLEDPin;
   //set pins to output
   pinMode(_redLEDPin, OUTPUT);
   pinMode(_greenLEDPin, OUTPUT);
   pinMode(_blueLEDPin, OUTPUT);
+  //pwmOn allows use of pulse width modulation with analogWrite(pwm)
+  _pwmOn = pwmOn;
   //set pins HIGH, LED OFF
   _state = 1; //setting state to on to allow for turnOffLED() call
   turnOffLED();
 }
 
 /**
-*Turn on LED (white light) and set _state to 1
+*Signals RGB(0, 0, 0) to create white light
 */
 void RGBLED::turnOnLED(){
   digitalWrite(_redLEDPin, LOW);
-  _redPWM = 0;
+  _redSignal = 0;
   digitalWrite(_greenLEDPin, LOW);
-  _greenPWM = 0;
+  _greenSignal = 0;
   digitalWrite(_blueLEDPin, LOW);
-  _bluePWM = 0;
-    _state = 1;
-}
-
-/**
-*Turn on LED with assigned PWM values for Red, Green, and Blue
-*@param redPWM pulse width mod for red pin
-*@param greenPWW pulse width mod for green pin
-*@param bluePWM pulse width mod for blue pin
-*/
-void RGBLED::turnOnLED(int redPWM, int greenPWM, int bluePWM){
-  turnOffLED();
-  _redPWM = redPWM;
-  analogWrite(_redLEDPin, redPWM);
-  _greenPWM = greenPWM;
-  analogWrite(_greenLEDPin, greenPWM);
-  _bluePWM = bluePWM;
-  analogWrite(_blueLEDPin, bluePWM);
+  _blueSignal = 0;
   _state = 1;
 }
 
 /**
-*Turns off all RGB pins and then sets _redLEDPin low, turning on Red LED
+*Turn on LED with assigned PWM values for Red, Green, and Blue
+*@param redSignal pulse width mod for red pin
+*@param greenPWW pulse width mod for green pin
+*@param blueSignal pulse width mod for blue pin
 */
-void RGBLED::turnOnRedLED(){
-  turnOnLED(0, 255, 255);
+void RGBLED::turnOnLED(int redSignal, int greenSignal, int blueSignal){
+  turnOffLED();
+  if(_pwmOn){
+    _redSignal = redSignal;
+    analogWrite(_redLEDPin, redSignal);
+    _greenSignal = greenSignal;
+    analogWrite(_greenLEDPin, greenSignal);
+    _blueSignal = blueSignal;
+    analogWrite(_blueLEDPin, blueSignal);
+  }
+  else{
+    _redSignal = redSignal;
+    digitalWrite(_redLEDPin, redSignal);
+    _greenSignal = greenSignal;
+    digitalWrite(_greenLEDPin, greenSignal);
+    _blueSignal = blueSignal;
+    digitalWrite(_blueLEDPin, blueSignal);
+  }
+  _state = 1;
 }
-
-/**
-*Turns off all RGB pins and then sets _greenLEDPin low, turning on Green LED
-*/
-void RGBLED::turnOnGreenLED(){
-  turnOnLED(255, 0, 255);
-}
-
-/**
-*Turns off all RGB pins and then sets _blueLEDPin low, turning on Blue LED
-*/
-void RGBLED::turnOnBlueLED(){
-  turnOnLED(255, 255, 0);
-}
-
-/**
-*Assigns RGB LED pins pwm values to generate yellow light
-*/
-void RGBLED::turnOnYellowLED(){
-  turnOnLED(0, 0, 255);
-}
-
-/**
-*Assigns RGB LED pins pwm values to generate orange light
-*/
-void RGBLED::turnOnOrangeLED(){
-  turnOnLED(0, 130, 255);
-}
-
-/**
-*Assigns RGB LED pins pwm values to generate pink light
-*/
-void RGBLED::turnOnPinkLED(){
-  turnOnLED(0, 255, 0);
-}
-
-/**
-*Assigns RGB LED pins pwm values to generate orange light
-*/
-void RGBLED::turnOnAquaLED(){
-  turnOnLED(255, 0, 0);
-}
-
-
 
 /**
 *Turn Off LED and set _state to False
@@ -114,11 +76,11 @@ void RGBLED::turnOnAquaLED(){
 void RGBLED::turnOffLED(){
   if(_state){
     digitalWrite(_redLEDPin, HIGH);
-    _redPWM = 255;
+    _redSignal = 255;
     digitalWrite(_greenLEDPin, HIGH);
-    _greenPWM = 255;
+    _greenSignal = 255;
     digitalWrite(_blueLEDPin, HIGH);
-    _bluePWM = 255;
+    _blueSignal = 255;
     _state = 0;
   }
 }
@@ -150,24 +112,80 @@ bool RGBLED::isOn(){
 
 /**
 *Get the current PWM of RGB's red pin
-*@return _redPWM
+*@return _redSignal
 */
-int RGBLED::getRedPWM(){
-  return _redPWM;
+int RGBLED::getRedSignal(){
+  return _redSignal;
 }
 
 /**
 *Get the current PWM of RGB's green pin
-*@return _redPWM
+*@return _redSignal
 */
-int RGBLED::getGreenPWM(){
-  return _greenPWM;
+int RGBLED::getGreenSignal(){
+  return _greenSignal;
 }
 
 /**
 *Get the current PWM of RGB's blue pin
-*@return _bluePWM
+*@return _blueSignal
 */
-int RGBLED::getBluePWM(){
-  return _bluePWM;
+int RGBLED::getBlueSignal(){
+  return _blueSignal;
 }
+
+/**
+*Signals RGB(0, 255, 255) to create red light
+*/
+void RGBLED::turnOnRedLED(){
+  turnOnLED(0, 255, 255);
+}
+
+/**
+*Signals RGB(255, 0, 255) to create green light
+*/
+void RGBLED::turnOnGreenLED(){
+  turnOnLED(255, 0, 255);
+}
+
+/**
+*Signals (255, 255, 0) to create blue light
+*/
+void RGBLED::turnOnBlueLED(){
+  turnOnLED(255, 255, 0);
+}
+
+/**
+*Signals RGB(0, 0, 255) to create yellow light
+*/
+void RGBLED::turnOnYellowLED(){
+  turnOnLED(0, 0, 255);
+}
+
+/**
+*Signals RGB(0, 130, 255) to create orange light
+*pwmOn must be enabled during RGBLED initialization
+*/
+void RGBLED::turnOnOrangeLED(){
+  if(_pwmOn){
+    turnOnLED(0, 130, 255);
+  }
+}
+
+/**
+*Signals RGB(0, 255, 0) to create pink light
+*/
+void RGBLED::turnOnMagentaLED(){
+  turnOnLED(0, 255, 0);
+}
+
+/**
+*Signals RGB(255, 0, 0) to create aqua light
+*/
+void RGBLED::turnOnCyanLED(){
+  turnOnLED(255, 0, 0);
+}
+
+
+
+

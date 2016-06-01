@@ -10,7 +10,7 @@
 
 class RGBLED{
   public:
-  RGBLED(int, int, int);
+  RGBLED(int, int, int, bool);
   void turnOnLED();
   void turnOnLED(int, int, int);
   void turnOnRedLED();
@@ -18,21 +18,22 @@ class RGBLED{
   void turnOnGreenLED();
   void turnOnYellowLED();
   void turnOnOrangeLED();
-  void turnOnPinkLED();
-  void turnOnAquaLED();
+  void turnOnMagentaLED();
+  void turnOnCyanLED();
   void turnOffLED();
   int toggleLED();
-  int getRedPWM();
-  int getGreenPWM();
-  int getBluePWM();
+  int getRedSignal();
+  int getGreenSignal();
+  int getBlueSignal();
   bool isOn();
   private:
   int _redLEDPin;
   int _greenLEDPin;
   int _blueLEDPin;
-  int _redPWM;
-  int _greenPWM;
-  int _bluePWM;
+  int _redSignal;
+  int _greenSignal;
+  int _blueSignal;
+  bool _pwmOn;
   int _state;
 
 };
