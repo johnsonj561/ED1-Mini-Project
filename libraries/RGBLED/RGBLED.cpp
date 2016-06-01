@@ -23,6 +23,7 @@ RGBLED::RGBLED(int redLedPin, int greenLedPin, int blueLedPin){
   pinMode(_greenLEDPin, OUTPUT);
   pinMode(_blueLEDPin, OUTPUT);
   //set pins HIGH, LED OFF
+  _state = 1; //setting state to on to allow for turnOffLED() call
   turnOffLED();
 }
 
