@@ -13,7 +13,7 @@
 *configures analog input pin to read photoresistor values
 */
 ColorDetector::ColorDetector(int redLEDPin, int greenLEDPin, int blueLEDPin, int photoresistorPin)
-  : _RGBLED(redLEDPin, greenLEDPin, blueLEDPin){
+  : _RGBLED(redLEDPin, greenLEDPin, blueLEDPin, false){     //note pwm is disabled
     _photoresistorPin = photoresistorPin;
     pinMode(_photoresistorPin, INPUT);
   }
@@ -47,6 +47,14 @@ int ColorDetector::detectColor(){
     largest = blue;
     colorMatch = BLUE_MATCH;
   }
+  //checking to make sure we have the right color
+  //due to problems with green/blue values too close
+  int confidence = blue - green;
+  Serial.print("B-G Confidence = "); Serial.println(confidence);
+  if(largest == blue && confidence < 50){
+    Serial.println("Confidence < 50, returning NO_MATCH");
+    colorMatch = NO_MATCH;
+  }
   
   _RGBLED.turnOffLED();
   return colorMatch;
@@ -63,6 +71,8 @@ int ColorDetector::detectRed(){
     red += analogRead(_photoresistorPin);
   }
   red = red/10;
+  Serial.print("R = ");
+  Serial.println(red);
   return red;
 }
 
@@ -77,6 +87,8 @@ int ColorDetector::detectGreen(){
     green += analogRead(_photoresistorPin);
   }
   green = green/10;
+  Serial.print("G = ");
+  Serial.println(green);
   return green;
 }
 
@@ -91,6 +103,8 @@ int ColorDetector::detectBlue(){
     blue += analogRead(_photoresistorPin);
   }
   blue = blue/10;
+  Serial.print("B = ");
+  Serial.println(blue);
   return blue;
 }
 
@@ -170,8 +184,9 @@ int ColorDetector::detectWhite(){
 */
 bool ColorDetector::detectObject(){
   _RGBLED.turnOnLED();
-  delay(200);
+  delay(25);
   int photoCellVoltage = analogRead(_photoresistorPin);
+  _RGBLED.turnOffLED();
   if(photoCellVoltage > OBJECT_THRESHOLD){
     return true;
   }

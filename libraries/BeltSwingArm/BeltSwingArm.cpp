@@ -32,7 +32,6 @@ BeltSwingArm::BeltSwingArm(int servoPin){
   _minAngle = 0;
   _maxAngle = 180;
   _currentAngle = _minAngle;
-  
 }
 
 /**
